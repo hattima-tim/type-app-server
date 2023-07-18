@@ -19,4 +19,12 @@ router.post("/sign-up", async (req, res, next) => {
   }
 });
 
+router.post(
+  "/log-in",
+  passport.authenticate("local", {
+    successRedirect: "http://localhost:3001",
+    failureRedirect: "http://localhost:3001/authentication/log-in",
+  })
+);
+
 module.exports = router;

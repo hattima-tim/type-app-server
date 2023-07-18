@@ -14,3 +14,10 @@ model books {
   imgUrl   String
   pages    String[]
 }
+
+model users {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  password String
+  username String
+  wpm      Int
+}

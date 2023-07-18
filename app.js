@@ -13,6 +13,7 @@ const prisma = new PrismaClient();
 
 var indexRouter = require("./routes/index");
 var userRouter = require("./routes/user");
+const authRouter = require("./routes/auth");
 
 var app = express();
 
@@ -62,6 +63,13 @@ passport.deserializeUser(async function (id, done) {
   }
 });
 
+app.use(
+  cors({
+    origin: "http://localhost:3001",
+    credentials: true,
+  })
+);
+
 app.use(session({ secret: "cats", resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -73,6 +81,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/user", userRouter);
+app.use("/authentication", authRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

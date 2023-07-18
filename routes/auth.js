@@ -27,4 +27,14 @@ router.post(
   })
 );
 
+router.post("/log-out", (req, res, next) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+
+    res.sendStatus(200);
+  });
+});
+
 module.exports = router;

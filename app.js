@@ -8,6 +8,7 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const { PrismaClient } = require("@prisma/client");
+const bcrypt = require("bcryptjs");
 
 const prisma = new PrismaClient();
 
@@ -35,11 +36,15 @@ passport.use(
         return done(null, false, { message: "Incorrecet Username" });
       }
 
-      if (user.password !== password) {
-        return done(null, false, { message: "Incorrect Password" });
-      }
-
-      return done(null, user);
+      bcrypt.compare(password, user.password, (err, res) => {
+        if (res) {
+          // passwords match! log user in
+          return done(null, user);
+        } else {
+          // passwords do not match!
+          return done(null, false, { message: "Incorrect password" });
+        }
+      });
     } catch (err) {
       done(err);
     }

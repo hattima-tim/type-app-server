@@ -21,4 +21,25 @@ router.get("/leaderboard", async (req, res, next) => {
 
   res.json(users);
 });
+
+router.post("/user/wpm", async (req) => {
+  if (req.user) {
+    const userWpm = req.body.wpm;
+
+    try {
+      await prisma.users.update({
+        where: {
+          id: req.user.id,
+        },
+        data: {
+          wpm: userWpm,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+
+    prisma.$disconnect();
+  }
+});
 module.exports = router;
